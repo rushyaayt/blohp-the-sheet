@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Turf Booking App</title>
+<style>
+:root{--bg:#f4f7f3;--card:#fff;--ink:#13201a;--mut:#667068;--line:#e2e8e0;--pri:#0f9d58;--gs:#dff4e6;--gt:#0a6b3a;--rs:#fde3e3;--rt:#b42318;--acc:#ff7a1a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c130f;--card:#15201a;--ink:#eef3ee;--mut:#93a097;--line:#25322a;--gs:#12351f;--gt:#6ee7a0;--rs:#3a1717;--rt:#ff9a9a}}
+:root[data-theme="dark"]{--bg:#0c130f;--card:#15201a;--ink:#eef3ee;--mut:#93a097;--line:#25322a;--gs:#12351f;--gt:#6ee7a0;--rs:#3a1717;--rt:#ff9a9a}
+html,body{height:100%}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.app{max-width:480px;margin:0 auto;min-height:100%;padding:18px 16px 96px}
+h1{font-size:24px;margin:0 0 4px;letter-spacing:-.02em}h2{font-size:16px;margin:0 0 8px}
+.mut{color:var(--mut);font-size:13px}
+.view{animation:f .3s}@keyframes f{from{opacity:0;transform:translateY(6px)}}
+.home{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;gap:18px}
+.logo{width:150px;height:150px;position:relative;display:flex;align-items:center;justify-content:center}
+.logo i{position:absolute;inset:0;border-radius:50%;border:2px solid var(--pri);animation:rip 2.4s ease-out infinite}
+.logo i:nth-child(2){animation-delay:1.2s}
+@keyframes rip{from{transform:scale(.55);opacity:.9}to{transform:scale(1.15);opacity:0}}
+.ball{width:92px;height:92px;border-radius:50%;background:linear-gradient(145deg,#12b866,#0b6b3c);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 28px #0f9d5855;animation:bob 2.4s ease-in-out infinite}
+.ball svg{width:60px;height:60px;animation:spin 6s linear infinite}
+@keyframes bob{50%{transform:translateY(-9px)}}@keyframes spin{to{transform:rotate(360deg)}}
+.brand{font-size:26px;font-weight:800;color:var(--pri)}.brand b{color:var(--acc)}
+.hint{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 16px;font-size:13px;color:var(--mut);max-width:290px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:14px}
+.lbl{display:block;font-size:12px;font-weight:700;color:var(--mut);text-transform:uppercase;margin-bottom:6px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;outline:0}
+input:focus,select:focus{border-color:var(--pri)}
+.err{color:var(--rt);font-size:12px;margin-top:4px;min-height:0}
+.times{display:flex;gap:8px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none}
+.t{flex:none;padding:9px 13px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);font-weight:600;font-size:13px}
+.t.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.step{display:flex;align-items:center;justify-content:center;gap:18px}
+.step button{width:44px;height:44px;border-radius:50%;background:var(--pri);color:#fff;font-size:24px;font-weight:700}
+.step button:disabled{opacity:.35}
+.step div{text-align:center;min-width:90px}.step b{font-size:30px;display:block;line-height:1}
+.ban{border-radius:14px;padding:12px 14px;font-weight:700;margin-top:12px;animation:f .25s;transition:background .3s}
+.ban.ok{background:var(--gs);color:var(--gt)}.ban.no{background:var(--rs);color:var(--rt)}
+.ban small{display:block;font-weight:500;margin-top:2px}
+.sl{display:flex;justify-content:space-between;padding:9px 12px;border-radius:10px;background:var(--rs);color:var(--rt);font-size:13px;margin-top:6px;font-weight:600}
+.btn{width:100%;background:var(--pri);color:#fff;font-weight:700;padding:14px;border-radius:14px;margin-top:12px}
+.btn.o{background:var(--card);color:var(--pri);border:1.5px solid var(--pri)}.btn:disabled{opacity:.4}
+.tot{display:flex;justify-content:space-between;align-items:baseline}.tot b{font-size:30px}
+.qr{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:12px}
+.qrb{background:#fff;padding:12px;border-radius:16px;border:1px solid var(--line);width:184px;height:184px;display:flex;align-items:center;justify-content:center}
+.lock{font-size:12px;color:var(--mut);display:flex;gap:6px;align-items:center}
+.qi{display:flex;gap:12px;align-items:center;padding:12px;border-radius:14px;background:var(--bg);margin-top:8px}
+.av{width:40px;height:40px;border-radius:50%;background:var(--gs);color:var(--gt);font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.qi .sp{flex:1}.pill{font-size:12px;font-weight:700;background:var(--gs);color:var(--gt);padding:3px 9px;border-radius:99px}
+.dh{font-weight:800;margin:18px 0 0;font-size:14px}
+.empty{text-align:center;padding:40px 10px;color:var(--mut)}.empty span{font-size:46px;display:block}
+.ok-s{text-align:center;padding:30px 10px}.ok-s .ck{width:76px;height:76px;border-radius:50%;background:var(--pri);color:#fff;font-size:40px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;animation:pop .4s}
+@keyframes pop{from{transform:scale(0)}}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px);z-index:9}
+nav div{display:flex;width:100%;max-width:480px}
+nav button{flex:1;padding:10px 0 9px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:600;color:var(--mut)}
+nav button span{font-size:22px}nav .on{color:var(--pri)}
+</style></head><body>
+<div class="app" id="app"></div>
+<nav><div id="nav"></div></nav>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+// ---- Config (UI preview: replace with your real details) ----
+const CFG={name:'Your Turf',upi:'yourname@upi',rate:200,min:1,max:12,open:6,close:24};
+const $=q=>document.querySelector(q);
+const key=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const fh=h=>{h=h%24;return((h%12)||12)+':00 '+(h<12?'AM':'PM')};
+const today=new Date(),tm=new Date();tm.setDate(tm.getDate()+1);
+// Mock bookings (UI-only demo data)
+const B=[{n:'Rahul S.',d:key(today),s:17,e:19},{n:'Aman K.',d:key(today),s:20,e:22},{n:'Team Tigers',d:key(tm),s:7,e:10},{n:'Sneha P.',d:key(tm),s:18,e:21}];
+const S={tab:'home',name:'',wa:'',date:key(today),start:null,hrs:1,done:null,errs:{}};
+const clash=()=>S.start==null?[]:B.filter(b=>b.d==S.date&&S.start<b.e&&S.start+S.hrs>b.s);
+const sameDay=()=>B.filter(b=>b.d==S.date).sort((a,b)=>a.s-b.s);
+function home(){return `<div class="home view"><div class="logo"><i></i><i></i><div class="ball"><svg viewBox="0 0 100 100" fill="none" stroke="#fff" stroke-width="5"><circle cx="50" cy="50" r="42"/><path d="M50 22l20 15-8 24H38l-8-24z" fill="#fff3"/><path d="M50 22V8M70 37l18-6M62 61l12 15M38 61L26 76M30 37L12 31"/></svg></div></div>
+<div class="brand">${CFG.name.split(' ')[0]} <b>${CFG.name.split(' ').slice(1).join(' ')||'Turf'}</b></div>
+<div class="hint">First check the <b>Queue</b> tab to see the booked timing slots.</div></div>`}
+function booking(){
+if(S.done)return `<div class="ok-s view"><div class="ck">✓</div><h1>Booking confirmed</h1><p class="mut">${S.done.n} · ${S.done.d}<br>${fh(S.done.s)} – ${fh(S.done.e)} (${S.done.e-S.done.s} hr)</p><button class="btn" onclick="S.done=null;S.start=null;S.hrs=1;go('queue')">View in Queue</button><button class="btn o" onclick="S.done=null;render()">Book another</button></div>`;
+const cl=clash(),ok=S.start!=null&&!cl.length&&S.start+S.hrs<=CFG.close,over=S.start!=null&&S.start+S.hrs>CFG.close;
+const ready=S.name.trim()&&/^\d{10}$/.test(S.wa)&&ok,total=S.hrs*CFG.rate;
+const times=[...Array(CFG.close-CFG.open)].map((_,i)=>CFG.open+i);
+return `<div class="view"><h1>Book a slot</h1><div class="mut">₹${CFG.rate}/hour · ${CFG.min}–${CFG.max} hours</div>
+<div class="card"><label class="lbl">Player name</label><input id="n" placeholder="Your name" value="${S.name}" oninput="S.name=this.value;upd()">
+<label class="lbl" style="margin-top:14px">WhatsApp number</label><input id="w" inputmode="numeric" maxlength="10" placeholder="10-digit number" value="${S.wa}" oninput="this.value=this.value.replace(/\\D/g,'');S.wa=this.value;upd()"><div class="err" id="we"></div></div>
+<div class="card"><label class="lbl">Date</label><input type="date" min="${key(today)}" value="${S.date}" onchange="S.date=this.value;S.start=null;render()">
+<label class="lbl" style="margin-top:14px">Start time</label><div class="times">${times.map(h=>`<button class="t ${S.start==h?'on':''}" onclick="S.start=${h};render()">${fh(h)}</button>`).join('')}</div>
+<label class="lbl" style="margin-top:12px">Hours to play</label><div class="step"><button ${S.hrs<=CFG.min?'disabled':''} onclick="S.hrs--;render()">−</button><div><b>${S.hrs}</b><span class="mut">hour${S.hrs>1?'s':''}</span></div><button ${S.hrs>=CFG.max?'disabled':''} onclick="S.hrs++;render()">+</button></div>
+${S.start!=null?(ok?`<div class="ban ok">Available timing<small>${fh(S.start)} – ${fh(S.start+S.hrs)} is free on this date.</small></div>`:`<div class="ban no">Unavailable timing<small>${over?'This runs past closing time ('+fh(CFG.close)+').':'Overlaps an existing booking.'}</small></div>`):`<div class="mut" style="margin-top:12px">Pick a start time to check availability.</div>`}
+<h2 style="margin-top:16px">Already booked on this date</h2>${sameDay().length?sameDay().map(b=>`<div class="sl"><span>${b.n}</span><span>${fh(b.s)} – ${fh(b.e)}</span></div>`).join(''):'<div class="mut">No bookings yet — the whole day is free.</div>'}</div>
+<div class="card"><div class="tot"><span class="mut">${S.hrs} hr × ₹${CFG.rate}</span><b>₹${total}</b></div>
+${ok?`<div class="qr"><div class="qrb" id="qr"></div><div class="lock">🔒 Amount fixed at ₹${total} — cannot be edited</div><div class="mut">Scan with any UPI app to pay</div></div><button class="btn o" onclick="toast('Opens your UPI app (in the real app)')">Pay via UPI app</button>`:'<div class="mut" style="margin-top:8px">Choose an available time to see your payment QR.</div>'}
+<button class="btn" id="cb" ${ready?'':'disabled'} onclick="confirmB()">Confirm booking</button></div></div>`}
+function queue(){const by={};B.filter(b=>b.d>=key(today)).forEach(b=>(by[b.d]=by[b.d]||[]).push(b));const ds=Object.keys(by).sort();
+return `<div class="view"><h1>Queue</h1><div class="mut">Public list of all booked slots</div>${ds.length?ds.map(d=>`<div class="dh">${d==key(today)?'Today':d==key(tm)?'Tomorrow':d} <span class="mut">· ${d}</span></div>${by[d].sort((a,b)=>a.s-b.s).map(b=>`<div class="qi"><div class="av">${b.n[0]}</div><div class="sp"><b>${b.n}</b><div class="mut">${fh(b.s)} – ${fh(b.e)}</div></div><span class="pill">${b.e-b.s} hr</span></div>`).join('')}`).join(''):'<div class="empty"><span>📋</span>No bookings yet.<br>Be the first to book!</div>'}</div>`}
+function upd(){$('#we').textContent=S.wa&&S.wa.length<10?'Enter all 10 digits':'';const ok=S.start!=null&&!clash().length&&S.start+S.hrs<=CFG.close;$('#cb').disabled=!(S.name.trim()&&/^\d{10}$/.test(S.wa)&&ok)}
+function confirmB(){if(clash().length)return render();const b={n:S.name.trim(),d:S.date,s:S.start,e:S.start+S.hrs};B.push(b);S.done=b;S.name='';S.wa='';render()}
+function qr(){const el=$('#qr');if(!el)return;el.innerHTML='';const u=`upi://pay?pa=${CFG.upi}&pn=${encodeURIComponent(CFG.name)}&am=${S.hrs*CFG.rate}&cu=INR`;
+try{new QRCode(el,{text:u,width:160,height:160})}catch(e){el.textContent='QR'}}
+function render(){const a=$('#app');a.innerHTML=S.tab=='home'?home():S.tab=='booking'?booking():queue();
+$('#nav').innerHTML=[['home','Home','🏠'],['booking','Booking','📅'],['queue','Queue','📋']].map(n=>`<button class="${S.tab==n[0]?'on':''}" onclick="go('${n[0]}')"><span>${n[2]}</span>${n[1]}</button>`).join('');qr()}
+function go(t){S.tab=t;scrollTo(0,0);render()}
+function toast(m){alert(m)}
+render();
+</script></body></html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Turf Booking App</title>
+<style>
+:root{--bg:#f3f4f6;--card:#fff;--ink:#1f2937;--mut:#6b7280;--line:#e5e7eb;--in:#f9fafb;--blue:#2563eb;--grn:#15803d;--gs:#dcfce7;--rs:#fee2e2;--rt:#b91c1c;--sl:#f3f4f6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f141b;--card:#18202a;--ink:#f1f5f9;--mut:#94a3b8;--line:#2a3441;--in:#111821;--gs:#12351f;--rs:#3b1818;--rt:#fca5a5;--sl:#222c38;--grn:#6ee7a0}}
+:root[data-theme="dark"]{--bg:#0f141b;--card:#18202a;--ink:#f1f5f9;--mut:#94a3b8;--line:#2a3441;--in:#111821;--gs:#12351f;--rs:#3b1818;--rt:#fca5a5;--sl:#222c38;--grn:#6ee7a0}
+html,body{height:100%}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+header{background:var(--card);box-shadow:0 2px 8px #0001;position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.hd{max-width:1100px;margin:0 auto;padding:8px 16px;display:flex;align-items:center;gap:10px}
+.lg{font-weight:900;color:#166534;line-height:1;font-size:15px;letter-spacing:.02em}
+.app{max-width:1100px;margin:0 auto;padding:16px 14px 150px}
+h1{font-size:26px;margin:0;text-align:center}h2{font-size:22px;margin:0 0 6px}
+.mut{color:var(--mut);font-size:13px}
+.card{background:var(--card);border-radius:22px;padding:20px;box-shadow:0 1px 6px #0000000d}
+.view{animation:f .3s}@keyframes f{from{opacity:0;transform:translateY(6px)}}
+.cols{display:grid;gap:16px}
+@media(min-width:900px){.cols{grid-template-columns:420px 1fr;align-items:start}}
+.lbl{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;margin:16px 0 7px}
+input,select{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;outline:0}
+input:focus,select:focus{border-color:var(--blue);background:#eaf0ff;color:#111}
+.two{display:grid;grid-template-columns:1fr 1.1fr;gap:12px}
+.err{color:var(--rt);font-size:12px;margin-top:4px}
+.ban{border-radius:14px;padding:12px 14px;font-weight:700;margin-top:16px;animation:f .25s}
+.ban.ok{background:var(--gs);color:var(--grn)}.ban.no{background:var(--rs);color:var(--rt)}.ban small{display:block;font-weight:500}
+.bk{display:flex;justify-content:space-between;padding:8px 12px;border-radius:10px;background:var(--rs);color:var(--rt);font-size:13px;font-weight:600;margin-top:6px}
+.sec{display:flex;align-items:center;gap:8px;font-size:20px;font-weight:700;margin:18px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:560px){.sg{grid-template-columns:repeat(3,1fr)}}@media(min-width:900px){.sg{grid-template-columns:repeat(4,1fr)}}
+.sl{border:1.5px solid var(--line);border-radius:14px;padding:10px;background:var(--card);text-align:center;transition:.15s}
+.sl .tm{background:var(--sl);border-radius:8px;padding:6px 2px;font-weight:700;font-size:13px;line-height:1.35}.sl small{font-weight:400;font-size:12px}
+.sl b{display:block;color:var(--blue);margin-top:8px;font-size:16px}
+.sl.bad{background:var(--rs);border-color:transparent}.sl.bad b{color:var(--rt)}.sl.bad .tm{background:#fff4}
+.sl.on{border:2px solid var(--blue);box-shadow:0 0 0 3px #2563eb22}
+.bar{position:fixed;left:0;right:0;bottom:calc(58px + env(safe-area-inset-bottom,0px));padding:10px 14px;background:var(--card);border-top:1px solid var(--line);z-index:15}
+.bar button{display:block;width:100%;max-width:1100px;margin:0 auto;padding:12px;border-radius:12px;background:var(--blue);color:#fff;font-weight:700;line-height:1.5}
+.bar button:disabled{background:var(--line);color:var(--mut);cursor:not-allowed}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);z-index:16;padding-bottom:env(safe-area-inset-bottom,0px)}
+nav div{display:flex;max-width:480px;margin:0 auto}
+nav button{flex:1;padding:8px 0;display:flex;flex-direction:column;align-items:center;font-size:12px;font-weight:600;color:var(--mut)}
+nav span{font-size:20px}nav .on{color:var(--blue)}
+.mo{position:fixed;inset:0;background:#0007;backdrop-filter:blur(4px);z-index:40;display:flex;align-items:center;justify-content:center;padding:16px;animation:f .2s}
+.md{background:var(--card);border-radius:22px;padding:24px;width:100%;max-width:420px;text-align:center}
+.sum{background:var(--in);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:left;margin:16px 0;display:grid;gap:9px}
+.acts{display:flex;gap:10px;justify-content:flex-end}.acts button{padding:12px 16px;border-radius:12px;font-weight:700;background:var(--sl)}.acts .p{background:var(--blue);color:#fff;flex:1}
+.qrb{background:#fff;padding:12px;border-radius:16px;border:1px solid var(--line);width:184px;height:184px;margin:12px auto;display:flex;align-items:center;justify-content:center}
+.ck{width:70px;height:70px;border-radius:50%;background:#16a34a;color:#fff;font-size:38px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;animation:pop .4s}@keyframes pop{from{transform:scale(0)}}
+.home{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:62vh;text-align:center;gap:18px}
+.logo{width:150px;height:150px;position:relative;display:flex;align-items:center;justify-content:center}
+.logo i{position:absolute;inset:0;border-radius:50%;border:2px solid #16a34a;animation:rip 2.4s ease-out infinite}.logo i+i{animation-delay:1.2s}
+@keyframes rip{from{transform:scale(.55);opacity:.9}to{transform:scale(1.15);opacity:0}}
+.ball{width:92px;height:92px;border-radius:50%;background:linear-gradient(145deg,#22c55e,#166534);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 28px #16a34a55;animation:bob 2.4s ease-in-out infinite}
+.ball svg{width:58px;height:58px;animation:spin 6s linear infinite}@keyframes bob{50%{transform:translateY(-9px)}}@keyframes spin{to{transform:rotate(360deg)}}
+.hint{background:var(--card);border-radius:14px;padding:11px 16px;font-size:13px;color:var(--mut);max-width:290px;box-shadow:0 1px 6px #0000000d}
+.dh{font-weight:800;margin:20px 0 4px}.qi{display:flex;gap:12px;align-items:center;padding:12px;border-radius:14px;background:var(--card);margin-top:8px;box-shadow:0 1px 6px #0000000d}
+.av{width:40px;height:40px;border-radius:50%;background:var(--gs);color:var(--grn);font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.qi .sp{flex:1}.pill{font-size:12px;font-weight:700;background:#dbeafe;color:var(--blue);padding:3px 9px;border-radius:99px}
+.empty{text-align:center;padding:50px 10px;color:var(--mut)}.empty span{font-size:46px;display:block}
+</style></head><body>
+<header><div class="hd"><svg width="44" height="36" viewBox="0 0 44 36"><path d="M2 20l20 12 20-12-4-6H6z" fill="#16a34a"/><path d="M4 14l3-8 3 7 3-9 3 9 3-8 3 8 3-9 3 9 3-7 3 8z" fill="#22c55e"/><rect x="22" y="2" width="6" height="22" rx="3" transform="rotate(35 25 13)" fill="#fff" stroke="#166534" stroke-width="2"/></svg><div class="lg" id="lg"></div></div></header>
+<div class="app" id="app"></div><div id="ov"></div><div id="bar"></div>
+<nav><div id="nav"></div></nav>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+// Config for this UI preview – replace with the real ground name & UPI ID
+const CFG={name:'YOUR TURF',upi:'yourname@upi',rate:200};
+const $=q=>document.querySelector(q);
+const key=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const dn=s=>{const[y,m,d]=s.split('-').map(Number);return Math.floor(Date.UTC(y,m-1,d)/864e5)};
+const fm=m=>{m=((m%1440)+1440)%1440;const h=Math.floor(m/60),mm=m%60;return String((h%12)||12).padStart(2,'0')+':'+String(mm).padStart(2,'0')+' '+(h<12?'AM':'PM')};
+const fd=n=>new Date(n*864e5).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'2-digit',year:'numeric',timeZone:'UTC'});
+const now=new Date(),T=dn(key(now)),nowMin=now.getHours()*60+now.getMinutes();
+// Demo bookings (UI only)
+const B=[{n:'Rahul S.',s:T*1440+1200,e:T*1440+1320},{n:'Aman K.',s:(T+1)*1440+420,e:(T+1)*1440+600},{n:'Team Tigers',s:(T+1)*1440+1080,e:(T+1)*1440+1260},{n:'Sneha P.',s:(T+2)*1440+360,e:(T+2)*1440+480}];
+const S={tab:'home',name:'',wa:'',date:key(now),hrs:1,sel:null,modal:0,last:null};
+const abs=m=>dn(S.date)*1440+m,clash=m=>B.filter(b=>abs(m)<b.e&&abs(m)+S.hrs*60>b.s);
+const valid=()=>S.name.trim()&&/^\d{10}$/.test(S.wa)&&S.sel!=null&&!clash(S.sel).length;
+const total=()=>S.hrs*CFG.rate;
+$('#lg').innerHTML=CFG.name.split(' ').join('<br>');
+function home(){return `<div class="home view"><div class="logo"><i></i><i></i><div class="ball"><svg viewBox="0 0 100 100" fill="none" stroke="#fff" stroke-width="5"><circle cx="50" cy="50" r="42"/><path d="M50 22l20 15-8 24H38l-8-24z" fill="#fff3"/><path d="M50 22V8M70 37l18-6M62 61l12 15M38 61L26 76M30 37L12 31"/></svg></div></div><h2 style="color:#166534">${CFG.name}</h2><div class="hint">First check the <b>Queue</b> tab to see the booked timing slots.</div></div>`}
+function booking(){const sd=dn(S.date),list=B.filter(b=>b.s<(sd+1)*1440&&b.e>sd*1440).sort((a,b)=>a.s-b.s);
+const secs=[['Morning','☀️',0,720],['Afternoon','🌤️',720,1080],['Evening','🌙',1080,1260],['Night','🌑',1260,1440]];
+const grid=secs.map(([t,ic,a,z])=>{const ms=[];for(let m=a;m<z;m+=30)if(S.date>key(now)||m>=nowMin)ms.push(m);
+return ms.length?`<div class="sec"><span>${ic}</span>${t}</div><div class="sg">${ms.map(m=>`<button class="sl ${clash(m).length?'bad':''} ${S.sel===m?'on':''}" onclick="pick(${m})"><div class="tm">${fm(m)}<br><small>to</small><br>${fm(m+S.hrs*60)}</div><b>₹${total()}</b></button>`).join('')}</div>`:''}).join('');
+const c=S.sel!=null?clash(S.sel):[];
+return `<div class="cols view"><div class="card"><h1>Book Your Slot</h1>
+<label class="lbl">👤 Your Name</label><input placeholder="Full Name" value="${S.name}" oninput="S.name=this.value;upd()">
+<label class="lbl">💬 Contact (WhatsApp)</label><input inputmode="numeric" maxlength="10" placeholder="Whatsapp Number" value="${S.wa}" oninput="this.value=this.value.replace(/[^0-9]/g,'');S.wa=this.value;upd()"><div class="err" id="we"></div>
+<div class="two"><div><label class="lbl">⏳ Playing Time</label><select onchange="S.hrs=+this.value;render()">${[...Array(12)].map((_,i)=>`<option value="${i+1}" ${S.hrs==i+1?'selected':''}>${i+1} hr</option>`).join('')}</select></div>
+<div><label class="lbl">📅 Booking Date</label><input type="date" min="${key(now)}" value="${S.date}" onchange="S.date=this.value;S.sel=null;render()"></div></div>
+<div class="mut" style="margin-top:10px">₹${CFG.rate} per hour · 1 to 12 hours</div>
+${S.sel!=null?(c.length?`<div class="ban no">Unavailable timing<small>${fm(S.sel)} – ${fm(S.sel+S.hrs*60)} overlaps an existing booking.</small></div>`:`<div class="ban ok">Available timing<small>${fm(S.sel)} – ${fm(S.sel+S.hrs*60)} is free.</small></div>`):''}
+<div class="lbl" style="margin-top:18px">Already booked on ${fd(sd)}</div>${list.length?list.map(b=>`<div class="bk"><span>${b.n}</span><span>${fm(b.s)} – ${fm(b.e)}</span></div>`).join(''):'<div class="mut">No bookings — whole day is free.</div>'}</div>
+<div class="card"><h2>Select Slot Time</h2><div class="mut">Showing ${S.hrs} hr slots · red = already booked</div>${grid}</div></div>`}
+function queue(){const by={};B.filter(b=>b.e>T*1440).forEach(b=>{const d=Math.floor(b.s/1440);(by[d]=by[d]||[]).push(b)});const ds=Object.keys(by).sort();
+return `<div class="view"><h1 style="text-align:left">Queue</h1><div class="mut">Public list of all booked slots</div>${ds.length?ds.map(d=>`<div class="dh">${d==T?'Today':d==T+1?'Tomorrow':''} <span class="mut">${fd(+d)}</span></div>${by[d].sort((a,b)=>a.s-b.s).map(b=>`<div class="qi"><div class="av">${b.n[0]}</div><div class="sp"><b>${b.n}</b><div class="mut">${fm(b.s)} – ${fm(b.e)}</div></div><span class="pill">${(b.e-b.s)/60} hr</span></div>`).join('')}`).join(''):'<div class="empty"><span>📋</span>No bookings yet.<br>Be the first to book!</div>'}</div>`}
+function pick(m){S.sel=m;render()}
+function upd(){$('#we').textContent=S.wa&&S.wa.length<10?'Enter all 10 digits':'';const b=$('#rb');if(b)b.disabled=!valid()}
+function bar(){if(S.tab!='booking')return'';return `<div class="bar"><button id="rb" ${valid()?'':'disabled'} onclick="S.modal=1;render()">${S.sel!=null?fm(S.sel)+' - '+fm(S.sel+S.hrs*60)+'<br>':''}📅 Review &amp; Book</button></div>`}
+function modal(){const m=S.modal;if(!m)return'';const t=total();
+if(m==1)return `<div class="mo"><div class="md"><h2>Confirm Your Booking</h2><div class="sum"><div>👤 <b>Name:</b> ${S.name}</div><div>📅 <b>Date:</b> ${fd(dn(S.date))}</div><div>🕒 <b>Time:</b> ${fm(S.sel)} - ${fm(S.sel+S.hrs*60)}</div><div style="font-size:18px">🏷️ <b>Price: ₹${t}</b></div></div><div class="acts"><button onclick="S.modal=0;render()">Cancel</button><button class="p" onclick="S.modal=2;render()">Yes, Confirm &amp; Book</button></div></div></div>`;
+if(m==2)return `<div class="mo"><div class="md"><h2>Pay ₹${t}</h2><div class="mut">${S.hrs} hr × ₹${CFG.rate} · scan with any UPI app</div><div class="qrb" id="qr"></div><div class="mut">🔒 Amount is fixed at ₹${t} and cannot be edited</div><div class="acts" style="margin-top:16px"><button onclick="S.modal=1;render()">Back</button><button class="p" onclick="done()">I've paid – Complete</button></div></div></div>`;
+return `<div class="mo"><div class="md"><div class="ck">✓</div><h2>Booking confirmed</h2><div class="mut">${S.last.n}<br>${fd(Math.floor(S.last.s/1440))} · ${fm(S.last.s)} – ${fm(S.last.e)}</div><div class="acts" style="margin-top:18px"><button class="p" onclick="S.modal=0;go('queue')">View in Queue</button></div></div></div>`}
+function done(){if(clash(S.sel).length){S.modal=0;return render()}S.last={n:S.name.trim(),s:abs(S.sel),e:abs(S.sel)+S.hrs*60};B.push(S.last);S.name='';S.wa='';S.sel=null;S.modal=3;render()}
+function qr(){const el=$('#qr');if(!el)return;el.innerHTML='';try{new QRCode(el,{text:`upi://pay?pa=${CFG.upi}&pn=${encodeURIComponent(CFG.name)}&am=${total()}&cu=INR`,width:160,height:160})}catch(e){el.textContent='QR'}}
+function render(){const y=scrollY;$('#app').innerHTML=S.tab=='home'?home():S.tab=='booking'?booking():queue();$('#bar').innerHTML=bar();$('#ov').innerHTML=modal();
+$('#nav').innerHTML=[['home','Home','🏠'],['booking','Booking','📅'],['queue','Queue','📋']].map(n=>`<button class="${S.tab==n[0]?'on':''}" onclick="go('${n[0]}')"><span>${n[2]}</span>${n[1]}</button>`).join('');qr();scrollTo(0,y)}
+function go(t){S.tab=t;render();scrollTo(0,0)}
+render();
+</script></body></html>
